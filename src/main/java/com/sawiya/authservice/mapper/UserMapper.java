@@ -1,5 +1,6 @@
 package com.sawiya.authservice.mapper;
 
+import com.sawiya.authservice.dto.RegisterRequestDTO;
 import com.sawiya.authservice.dto.UserResponseDTO;
 import com.sawiya.authservice.model.User;
 
@@ -19,5 +20,10 @@ public class UserMapper {
                 build();
     }
 
-
+    public static User mapFromUserRequestDTO(RegisterRequestDTO registerRequestDTO) {
+        return User.builder().
+                firstName(registerRequestDTO.getFirstName()).lastName(registerRequestDTO.getLastName())
+                .email(registerRequestDTO.getEmail()).
+                password(registerRequestDTO.getPassword()).build();
+    }
 }

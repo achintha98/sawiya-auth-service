@@ -2,6 +2,9 @@ package com.sawiya.authservice.service;
 
 import com.sawiya.authservice.dto.RegisterRequestDTO;
 import com.sawiya.authservice.dto.UserResponseDTO;
+import com.sawiya.authservice.exception.EmailAlreadyExistsException;
+import com.sawiya.authservice.exception.UserNotFoundException;
+import com.sawiya.authservice.mapper.UserMapper;
 import com.sawiya.authservice.model.User;
 import com.sawiya.authservice.repository.UserRepository;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -21,13 +24,13 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public UserResponseDTO loadUserByUsername(String email)
-            throws UsernameNotFoundException {
+    public UserResponseDTO loadUserByEmail(String email)
+            throws UserNotFoundException {
 
         User user = userRepository
                 .findByEmail(email)
                 .orElseThrow(() ->
-                        new UsernameNotFoundException(
+                        new UserNotFoundException(
                                 "User not found"
                         ));
 
@@ -38,6 +41,13 @@ public class UserService {
                 .build();
     }
 
+    public UserResponseDTO register(RegisterRequestDTO registerRequestDTO) {
+        if (userRepository.existsByEmail(registerRequestDTO.getEmail())) {
+            throw new EmailAlreadyExistsException(
+                    "Email is already registered"
+            );
+        }
+        User user = userRepository.save(UserMapper.mapFromUserRequestDTO(registerRequestDTO));
+        return UserMapper.mapToUserResponseDTO(user);
+    }
 }
-
-
