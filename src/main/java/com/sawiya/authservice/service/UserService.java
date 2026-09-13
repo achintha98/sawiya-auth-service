@@ -7,11 +7,12 @@ import com.sawiya.authservice.exception.UserNotFoundException;
 import com.sawiya.authservice.mapper.UserMapper;
 import com.sawiya.authservice.model.UserEntity;
 import com.sawiya.authservice.repository.UserRepository;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 /**
@@ -19,9 +20,11 @@ import org.springframework.stereotype.Service;
  * @since 9/12/2026
  */
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
+
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public UserDetails loadUserByUsername(String email)
@@ -42,6 +45,7 @@ public class UserService implements UserDetailsService {
             throw new EmailAlreadyExistsException(
                     "Email is already registered");
         }
+        registerRequestDTO.setPassword(passwordEncoder.encode(registerRequestDTO.getPassword()));
         UserEntity userEntity = userRepository.save(UserMapper.mapFromUserRequestDTO(registerRequestDTO));
         return UserMapper.mapToUserResponseDTO(userEntity);
     }

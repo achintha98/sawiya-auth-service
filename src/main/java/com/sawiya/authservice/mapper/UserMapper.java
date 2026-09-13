@@ -1,10 +1,8 @@
 package com.sawiya.authservice.mapper;
 
 import com.sawiya.authservice.dto.RegisterRequestDTO;
-import com.sawiya.authservice.dto.UserResponseDTO;
-import com.sawiya.authservice.model.User;
-
-import java.time.LocalDate;
+import com.sawiya.authservice.dto.RegisterResponseDTO;
+import com.sawiya.authservice.model.UserEntity;
 
 /**
  * @author Achintha Kalunayaka
@@ -12,16 +10,16 @@ import java.time.LocalDate;
  */
 public class UserMapper {
 
-    public static UserResponseDTO mapToUserResponseDTO(User user) {
-        return UserResponseDTO.builder().
-                firstName(user.getFirstName()).
-                lastName(user.getLastName()).
-                email(user.getEmail()).
+    public static RegisterResponseDTO mapToUserResponseDTO(UserEntity userEntity) {
+        return RegisterResponseDTO.builder().
+                firstName(userEntity.getFirstName()).
+                lastName(userEntity.getLastName()).
+                email(userEntity.getEmail()).
                 build();
     }
 
-    public static User mapFromUserRequestDTO(RegisterRequestDTO registerRequestDTO) {
-        return User.builder().
+    public static UserEntity mapFromUserRequestDTO(RegisterRequestDTO registerRequestDTO) {
+        return UserEntity.builder().
                 firstName(registerRequestDTO.getFirstName()).lastName(registerRequestDTO.getLastName())
                 .email(registerRequestDTO.getEmail()).
                 password(registerRequestDTO.getPassword()).build();
