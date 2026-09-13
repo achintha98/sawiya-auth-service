@@ -1,10 +1,8 @@
 package com.sawiya.authservice.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.Email;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -15,12 +13,12 @@ import java.util.UUID;
  */
 
 @Entity
-@AllArgsConstructor
 @Table(name = "users")
 @NoArgsConstructor
+@AllArgsConstructor
 @Data
 @Builder
-public class User {
+public class UserEntity {
 
         @Id
         @GeneratedValue(strategy = GenerationType.AUTO)
@@ -32,8 +30,8 @@ public class User {
         @Column(nullable = false)
         private String lastName;
 
-
         @Column(unique = true, nullable = false)
+        @Email
         private String email;
 
         @Column(nullable = false)
