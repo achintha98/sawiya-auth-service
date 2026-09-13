@@ -2,8 +2,9 @@ package com.sawiya.authservice.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @author Achintha Kalunayaka
@@ -11,6 +12,8 @@ import lombok.Data;
  */
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class LoginRequestDTO {
 
     @NotBlank(message = "Email is required")

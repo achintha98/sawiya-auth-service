@@ -1,6 +1,6 @@
 package com.sawiya.authservice.dto;
 
-import lombok.Data;
+import lombok.*;
 
 /**
  * @author Achintha Kalunayaka
@@ -8,11 +8,11 @@ import lombok.Data;
  */
 
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class RegisterResponseDTO {
-
     private String firstName;
-
     private String lastName;
-
     private String email;
 }

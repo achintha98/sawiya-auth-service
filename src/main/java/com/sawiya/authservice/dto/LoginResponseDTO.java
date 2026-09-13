@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class LoginResponseDTO {
-    private String message;
+    private boolean message;
     private String status;
     private String token;
 }
