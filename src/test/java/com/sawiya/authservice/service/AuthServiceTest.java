@@ -6,8 +6,6 @@ import com.sawiya.authservice.dto.LoginResponseDTO;
 import com.sawiya.authservice.dto.RegisterRequestDTO;
 import com.sawiya.authservice.dto.RegisterResponseDTO;
 import com.sawiya.authservice.exception.EmailAlreadyExistsException;
-import com.sawiya.authservice.service.AuthService;
-import com.sawiya.authservice.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -69,7 +67,7 @@ class AuthServiceTest {
 
 
     @Test
-    void register_shouldReturn200AndRegisterResponse_whenRegistrationSucceeds() {
+    void register_shouldReturn201AndRegisterResponse_whenRegistrationSucceeds() {
 
         // Arrange
         RegisterRequestDTO request = new RegisterRequestDTO();
@@ -93,7 +91,7 @@ class AuthServiceTest {
                 authController.register(request);
 
         // Assert
-        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertEquals(expectedResponse, response.getBody());
 
         verify(userService).register(request);

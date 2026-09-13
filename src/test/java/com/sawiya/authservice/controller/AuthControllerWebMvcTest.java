@@ -1,6 +1,5 @@
 package com.sawiya.authservice.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sawiya.authservice.dto.LoginRequestDTO;
 import com.sawiya.authservice.dto.LoginResponseDTO;
 import com.sawiya.authservice.dto.RegisterRequestDTO;
