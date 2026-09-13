@@ -102,5 +102,25 @@ public class GlobalExceptionHandler {
         errorsMap.put("message", "Email already exists");
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorsMap);
     }
+
+    /**
+     * Handles unexpected exceptions that are not handled by more specific
+     * exception handlers.
+     *
+     * @param exception the unexpected exception
+     * @return an error response with HTTP 500 Internal Server Error
+     */
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponseDTO> handleInternalServerError(
+            Exception exception) {
+        logger.error("Unexpected server error", exception);
+
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ErrorResponseDTO(
+                        false,
+                        "Internal server error"
+                ));
+    }
 }
 
