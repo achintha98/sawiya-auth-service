@@ -16,9 +16,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 /**
+ * Service responsible for user registration and integration with
+ * Spring Security's user authentication mechanism.
+ *
  * @author Achintha Kalunayaka
  * @since 9/12/2026
  */
+
 @Service
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService {
@@ -26,6 +30,13 @@ public class UserService implements UserDetailsService {
 
     private final PasswordEncoder passwordEncoder;
 
+    /**
+     * Loads a user by their email address for authentication by Spring Security.
+     *
+     * @param email the email address used as the user's username
+     * @return the user's Spring Security {@link UserDetails}
+     * @throws UserNotFoundException if no user exists with the provided email
+     */
     @Override
     public UserDetails loadUserByUsername(String email)
             throws UserNotFoundException {
@@ -40,6 +51,17 @@ public class UserService implements UserDetailsService {
                 .build();
     }
 
+
+    /**
+     * Registers a new user after validating that the email address is not
+     * already registered and securely encoding the user's password.
+     *
+     * @param registerRequestDTO registration details containing the user's
+     *                           name, email, and password
+     * @return a response containing the newly registered user's details
+     * @throws EmailAlreadyExistsException if the email address is already
+     *                                     registered
+     */
     public RegisterResponseDTO register(RegisterRequestDTO registerRequestDTO) {
         if (userRepository.existsByEmail(registerRequestDTO.getEmail())) {
             throw new EmailAlreadyExistsException(
