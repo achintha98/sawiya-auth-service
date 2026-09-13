@@ -1,8 +1,9 @@
 package com.sawiya.authservice.exception;
 
-import com.sawiya.authservice.dto.LoginResponseDTO;
+import com.sawiya.authservice.dto.ErrorResponseDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
@@ -24,14 +25,13 @@ public class GlobalExceptionHandler {
     private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(AuthenticationException.class)
-    public ResponseEntity<LoginResponseDTO> handleInvalidCredentialsException(AuthenticationException exception) {
+    public ResponseEntity<ErrorResponseDTO> handleInvalidCredentialsException(AuthenticationException exception) {
         logger.warn("Invalid email or password {}", exception.getMessage());
         return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
-                .body(new LoginResponseDTO(
-                        "false",
-                        "Invalid email or password",
-                        null
+                .body(new ErrorResponseDTO(
+                        false,
+                        "Invalid email or password"
                 ));
     }
 
@@ -39,7 +39,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Map<String, String>> handleUserNotFoundException(UserNotFoundException exception) {
         Map<String, String> errorsMap = new HashMap<>();
         logger.warn("User does not exists {}", exception.getMessage());
-        errorsMap.put("Message ", "User does not exists");
+        errorsMap.put("message", "User does not exists");
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body(errorsMap);
@@ -53,10 +53,10 @@ public class GlobalExceptionHandler {
         String message = exception.getBindingResult()
                 .getFieldErrors()
                 .stream()
-                .map(error -> error.getField() + ": " + error.getDefaultMessage())
+                .map(DefaultMessageSourceResolvable::getDefaultMessage)
                 .findFirst()
                 .orElse("Invalid request");
-        errorsMap.put("Message", message);
+        errorsMap.put("message", message);
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(errorsMap);
@@ -66,8 +66,8 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Map<String, String>> handleEmailAlreadyExistsException(EmailAlreadyExistsException exception) {
         Map<String, String> errorsMap = new HashMap<>();
         logger.warn("Email already exists {}", exception.getMessage());
-        errorsMap.put("Message ", "Email already exists");
-        return ResponseEntity.badRequest().body(errorsMap);
+        errorsMap.put("message", "Email already exists");
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorsMap);
     }
 }
 
